@@ -51,29 +51,33 @@ class Article:
         if not os.path.exists(filepath):
             print('目录输入错误')
             return
-        absfilepath = filepath + f'\\{self.title}'
-        if os.path.exists(absfilepath):
-            # 清空文件夹中的文件
-            print('清空文件夹中的文件')
-            del_list = os.listdir(absfilepath)
-            for f in del_list:
-                file_path = os.path.join(absfilepath, f)
-                if os.path.isfile(file_path):
-                    os.remove(file_path)
+        if self.title:
+            absfilepath = filepath + f'\\{self.title}'
+            if os.path.exists(absfilepath):
+                # 清空文件夹中的文件
+                print('清空文件夹中的文件')
+                del_list = os.listdir(absfilepath)
+                for f in del_list:
+                    file_path = os.path.join(absfilepath, f)
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+            else:
+                print('生成文件夹')
+                os.mkdir(absfilepath)
+            self.filepathList.add(absfilepath)
+            self.__header['Referer'] = 'https://www.pixiv.net/'
+            pbar = tqdm.tqdm(imgLinks)
+            total = len(imgLinks)
+            for index, link in enumerate(pbar):
+                filename = link.split('/')[-1]
+                pbar.set_description("正在下载%s," % filename)
+                pbar.set_postfix({'current': index + 1, 'total': total})
+                try:
+                    res = requests.get(link, headers=self.__header)
+                    with open(absfilepath + f'\\{filename}', 'wb+') as f:
+                        f.write(res.content)
+                except Exception as e:
+                    print('需要设置代理', e)
         else:
-            print('生成文件夹')
-            os.mkdir(absfilepath)
-        self.filepathList.add(absfilepath)
-        self.__header['Referer'] = 'https://www.pixiv.net/'
-        pbar = tqdm.tqdm(imgLinks)
-        total = len(imgLinks)
-        for index, link in enumerate(pbar):
-            filename = link.split('/')[-1]
-            pbar.set_description("正在下载%s," % filename)
-            pbar.set_postfix({'current': index + 1, 'total': total})
-            try:
-                res = requests.get(link, headers=self.__header)
-                with open(absfilepath + f'\\{filename}', 'wb+') as f:
-                    f.write(res.content)
-            except Exception as e:
-                print('需要设置代理', e)
+            print('不存在该文章,请继续...')
+            self.getarticle()

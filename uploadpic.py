@@ -31,7 +31,7 @@ class upload:
                             'media': file
                         }
                         res = requests.post(self.url, files=files)
-                        pbar.set_description('正在上传' + res.json()['url'])
+                        pbar.set_description('正在上传' + f)
                         pbar.set_postfix({'current': index + 1, 'total': total})
         else:
             print('文件夹错误', filepath)

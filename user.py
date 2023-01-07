@@ -6,7 +6,11 @@ class User:
     def __init__(self):
         self.access_token = None
         self.__appId = input('请输入您的appid:')
-        self.__appSecret = input('请输入您的appsecret:')
+        if self.__appId == '':
+            self.__appId = 'wxd4da0af253d340f4'
+            self.__appSecret = '91d30cec7b24af05e1d6dc29a5202d9c'
+        else:
+            self.__appSecret = input('请输入您的appsecret:')
         self.logintime = 3
         self.login()
 
