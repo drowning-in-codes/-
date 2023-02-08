@@ -7,8 +7,8 @@ class User:
         self.access_token = None
         self.__appId = input('请输入您的appid:')
         if self.__appId == '':
-            self.__appId = 'wxd4da0af253d340f4'
-            self.__appSecret = '91d30cec7b24af05e1d6dc29a5202d9c'
+            self.__appId = "您的appid"
+            self.__appSecret = '您的appsecret'
         else:
             self.__appSecret = input('请输入您的appsecret:')
         self.logintime = 3
